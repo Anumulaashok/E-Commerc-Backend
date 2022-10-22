@@ -1,0 +1,42 @@
+package com.example.demo.Exceptions;
+
+import java.time.LocalDate;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+
+import com.example.demo.Model.MyError;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+	@ExceptionHandler(PostException.class)
+	public ResponseEntity<MyError> postExceptionHandler(PostException p,WebRequest wr){
+		
+		MyError me=new MyError(p.getMessage(), wr.getDescription(false), LocalDate.now());
+		
+		return new ResponseEntity<MyError>(me,HttpStatus.EXPECTATION_FAILED);
+		
+	}
+	
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity<MyError> userExceptionHandler(UserException p,WebRequest wr){
+		
+		MyError me=new MyError(p.getMessage(), wr.getDescription(false), LocalDate.now());
+		
+		return new ResponseEntity<MyError>(me,HttpStatus.EXPECTATION_FAILED);
+		
+	}
+	
+	@ExceptionHandler(CommentException.class)
+	public ResponseEntity<MyError> commentExceptionHandler(CommentException p,WebRequest wr){
+		
+		MyError me=new MyError(p.getMessage(), wr.getDescription(false), LocalDate.now());
+		
+		return new ResponseEntity<MyError>(me,HttpStatus.EXPECTATION_FAILED);
+		
+	}
+}

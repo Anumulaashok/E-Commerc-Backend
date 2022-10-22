@@ -1,0 +1,20 @@
+package com.example.demo.Service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class LogInSeriveImpl implements LogInService{
+
+	@Override
+	public String login(String username, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String logOut(String username, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

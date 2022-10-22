@@ -1,0 +1,37 @@
+package com.example.demo.Service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.Exceptions.PostException;
+import com.example.demo.Model.Post;
+
+@Service
+public class PostServiceImpl implements PostService{
+
+	@Override
+	public Post savePost(Post post)throws PostException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Post> getAllPost()throws PostException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Post getPostById(Integer id) throws PostException{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Post deletePost(Integer id)throws PostException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

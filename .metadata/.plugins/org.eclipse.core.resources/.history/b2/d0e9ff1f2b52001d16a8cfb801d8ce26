@@ -1,0 +1,53 @@
+package com.example.demo.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.Exceptions.UserException;
+import com.example.demo.Model.LoginDTO;
+import com.example.demo.Model.User;
+import com.example.demo.Repository.LogInDao;
+import com.example.demo.Repository.UserDao;
+
+@Service
+public class LogInSeriveImpl implements LogInService{
+	
+	@Autowired
+	private UserDao ud;
+	private LogInDao ld;
+
+	@Override
+	public String login(String username, String password) throws UserException {
+		
+	
+		User i=ud.findByUserName(username);
+		if(i==null) {
+			throw new UserException("Username not found");
+		}
+		if(!i.getPassword().equals(password)){
+			throw new UserException("Please Check your password");
+		}
+		LoginDTO l = new LoginDTO(LocalDate.now(), i.getEmail(), password); 
+		ld.save(l);
+		
+		return "Log In succesfull";
+	}
+
+	@Override
+	public String logOut(String username, String password) throws UserException {
+		
+		User i = ud.findByUserName(username);
+		LoginDTO l=ld.findByEmail(i.getEmail());
+		if(l==null) {
+			throw new UserException("User Not Loged in");
+		}
+		ld.delete(l);
+		
+		
+		return "Logout sucesfull";
+	}
+
+}

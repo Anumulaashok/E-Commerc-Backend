@@ -1,0 +1,78 @@
+package com.example.demo.Controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.demo.Exceptions.UserException;
+import com.example.demo.Model.LoginDTO;
+import com.example.demo.Model.User;
+import com.example.demo.Service.LogInService;
+import com.example.demo.Service.UserService;
+
+@Controller
+public class UserControl {
+
+	@Autowired
+	private UserService us;
+	
+	@Autowired
+	private LogInService ls;
+	
+	@PostMapping("/user")
+	public ResponseEntity<User> saveUser(@RequestBody User user)throws UserException{
+		
+		User user1= us.saveUser(user);
+		return new ResponseEntity<User>(user1,HttpStatus.OK);
+	}
+	
+	@GetMapping("/user/{name}")
+	public ResponseEntity<List<User>> saveUser(@PathVariable("name") String name)throws UserException{
+		List<User> user1 =us.getUserByName(name);
+		return new ResponseEntity<List<User>>(user1,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/user")
+	public ResponseEntity<String> deleteUser(@RequestParam("email") String email,@RequestParam("password") String Password)throws UserException{
+		String str= us.deleteUser(email, Password);
+		return new ResponseEntity<String>(str,HttpStatus.OK);
+		
+	}
+	
+	@PutMapping("/user/update")
+	public ResponseEntity<String> updatePassword(@RequestParam("email") String email,@RequestParam("currentPassword") String currentpass,@RequestParam("password") String Password)throws UserException{
+		String str= us.updatePassword(email,currentpass, Password);
+		return new ResponseEntity<String>(str,HttpStatus.OK);
+		
+	}
+	
+	@PostMapping("/user/login")
+	public ResponseEntity<String> LogIn(@RequestParam("Email") String email,@RequestParam("Password")String password) throws UserException{
+		
+		String s =	ls.login(email, password);
+		
+		return new ResponseEntity<String>(s,HttpStatus.OK);
+		
+	}
+	
+	@DeleteMapping("user/logout")
+	public ResponseEntity<String> LogOut(@RequestParam("username") String username,@RequestParam("Password")String password) throws UserException{
+		
+		String s =	ls.logOut(username, password);
+		
+		return new ResponseEntity<String>(s,HttpStatus.OK);
+		
+	}
+ 	
+	
+}

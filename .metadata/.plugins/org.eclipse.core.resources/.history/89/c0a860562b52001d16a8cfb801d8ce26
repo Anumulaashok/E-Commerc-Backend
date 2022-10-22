@@ -1,0 +1,106 @@
+package com.example.demo.Service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.Exceptions.UserException;
+import com.example.demo.Model.LoginDTO;
+import com.example.demo.Model.User;
+import com.example.demo.Repository.LogInDao;
+import com.example.demo.Repository.UserDao;
+
+@Service
+public class UserServiceImpl implements UserService{
+	
+	@Autowired
+	private UserDao ud;
+	
+	@Autowired
+	private LogInDao ld;
+	
+	@Override
+	public User saveUser(User user) throws UserException{
+		
+		User us=ud.findByEmail(user.getEmail());
+		
+		if(us!=null) {
+			
+			throw new UserException("User Already LogedIn");
+			
+		}
+		
+		return ud.save(user);
+		
+	}
+
+	@Override
+	public String updatePassword(String email,String currentpassword, String password)throws UserException {
+	
+		User u=ud.findByEmail(email);
+		
+		if(u==null) {
+			
+			throw new UserException("Email Not Found");
+			
+		}
+		
+		if(u.getPassword().equals(currentpassword)) {
+			
+			u.setPassword(password);
+			
+			ud.save(u);
+		}
+		
+		else {
+			
+			throw new UserException("Current password Not Matching");
+			
+		}
+		
+		return "User Updated";
+	}
+	
+
+	@Override
+	public List<User> getUserByName(String userName) throws UserException{
+	
+	List<User> users = ud.GetUserByName(userName);
+	
+		if(users.size()==0) {
+			
+			throw new UserException("UserName not found");
+			
+		}
+		
+		else {
+		
+			return users;
+		
+		}
+	
+	}
+
+	@Override
+	public String deleteUser(String email, String password)throws UserException {
+		
+		User u=ud.findByEmail(email);
+		if(u==null) {
+			throw new UserException("Email Not Found");
+ 		}
+		
+		LoginDTO userlogin=ld.findByEmail(email);
+		
+		if(userlogin==null) {
+			throw new UserException("User not Loged in Found");
+		}
+		if(!userlogin.getPassword().equals(password)) {
+			throw new UserException("User password not matched");
+		}
+		ud.delete(u);
+		
+		return "User deleted succesfully";
+	}
+
+}
